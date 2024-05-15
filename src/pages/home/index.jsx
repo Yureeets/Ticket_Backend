@@ -1,79 +1,69 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLocations } from "../../services/api";
-import "./styles.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './styles.css';
 
 const Home = () => {
-  const [where , setWhere] = useState('')
-  const [to , setTo] = useState('')
-  const [list, setList] = useState([]);
+  const [where, setWhere] = useState('');
+  const [to, setTo] = useState('');
   const queryClient = useQueryClient();
-  const location = useNavigate();
-  const get = async () => {
-    const result = await axios.get(`http://localhost:8000/api/v1/flights/cities/?origin_city=${where}&destination_city=${to}`)
-    return setList(result.data);
-  }
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["locations"],
-    queryFn: get,
+  const navigate = useNavigate();
+
+  const getFlights = async () => {
+    const result = await axios.get(`http://localhost:8000/api/v1/flights/cities/?origin_city=${where}&destination_city=${to}`);
+    return result.data;
+  };
+
+  const { isLoading, error } = useQuery({
+    queryKey: ['locations'],
+    queryFn: getFlights,
+    onSuccess: (data) => {
+      navigate('/results', { state: { list: data } });
+    }
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ origin_city: where, destination_city: to })
-  }
-
-  console.log(list)
+    mutation.mutate();
+  };
 
   const mutation = useMutation({
-    mutationFn: () => {
-      return get()
+    mutationFn: getFlights,
+    onSuccess: (data) => {
+      navigate('/data', { state: { list: data } });
     },
-    mutationKey: "locations"
-  })
+  });
 
   return (
-    <div className="container">
-      <div className="title-container">
-        <h1>Welcome to Airline Tickets</h1>
-      </div>
-      {list.length > 0 && <div>{list.map((c, key) => (
-        <div key={key} style={{display: 'flex', flexDirection: 'column'}}>
-          <span>{c.airline}</span>
-          <span>{c.depart_time}</span>
-          <span>{c.destination_city}</span>
-          <span>{c.duration}</span>
-          <span>{c.origin_city}</span>
-          <span>{c.plane}</span>
-        </div>
-      ))}</div>}
-     
+    <div className="home-container">
+      
 
-      {list.length === 0 && <div className="form-container">
-        <form className="form" onSubmit={handleSubmit}>
-          <label>From where?</label>
-          <input type="text" name="origin_city" onChange={(e)=> setWhere(e.target.value)} />
+      <h1>Welcome to Airline Tickets</h1>
 
-          {/* <option value="Paris" />
-                <option value="Chernivtsi" />
-                <option value="Kyiv" />
-                <option value="Lviv" />
-                <option value="New York" /> */}
+      <form className="form" onSubmit={handleSubmit}>
+        <label>From where we go?</label>
+        <input type="text" name="origin_city" list="originCities" onChange={(e) => setWhere(e.target.value)} />
+        <datalist id="originCities">
+          <option value="Paris" />
+          <option value="Chernivtsi" />
+          <option value="Kyiv" />
+          <option value="Lviv" />
+          <option value="New York" />
+        </datalist>
 
-          <label>To:</label>
-          <input type="text" name="destination_city" list="destinationCities" onChange={(e) => setTo(e.target.value)} />
+        <label>Where we go?</label>
+        <input type="text" name="destination_city" list="destinationCities" onChange={(e) => setTo(e.target.value)} />
+        <datalist id="destinationCities">
+          <option value="Paris" />
+          <option value="Chernivtsi" />
+          <option value="Kyiv" />
+          <option value="Lviv" />
+          <option value="New York" />
+        </datalist>
 
-          {/* <option value="Paris"/>
-                <option value="Chernivtsi"/>
-                <option value="Kyiv"/>
-                <option value="Lviv"/>
-                <option value="New York"/> */}
-
-          <button type="submit">Search</button>
-        </form>
-      </div>}
+        <button type="submit">SUBMIT</button>
+      </form>
     </div>
   );
 };

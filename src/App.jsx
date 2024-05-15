@@ -10,7 +10,7 @@ function App() {
     <>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <Navbar />
+        <Navbar></Navbar>
           <Router />
         </QueryClientProvider>
       </BrowserRouter>

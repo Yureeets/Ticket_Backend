@@ -4,6 +4,7 @@ import Home from "../pages/home";
 import Login from "../pages/login";
 import Register from "../pages/register";
 import Data from "../pages/data";
+import Booking from "../pages/booking";
 
 // const ProtectedRoute = ({ children }) => {
 //   const location = useLocation();
@@ -42,6 +43,12 @@ const routes = [
     element: <Data />,
     children: [],
   },
+  {
+    path: "/booking",
+    element: <Booking />,
+    children: [],
+  },
+  
 ];
 
 const Router = () => {

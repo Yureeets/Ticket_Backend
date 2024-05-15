@@ -15,3 +15,4 @@ export const getLocations = async (query) => {
     throw new Error("Failed to fetch locations");
   }
 };
+

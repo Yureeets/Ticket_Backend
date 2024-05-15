@@ -5,14 +5,12 @@ import CustomLink from "../../components/CustomLink";
 
 const Navbar = () => {
   return (
-    <div className="navbar">
-      <div className="navbar-container">
-        <h1>Yureets Airlines</h1>
-
-        <CustomLink to={"login"}>Login</CustomLink>
-      </div>
-    </div>
-  );
+    <nav>
+    <Link to="/">Home</Link>
+    <Link to="/booking">My Booking</Link>
+    <Link to="/login">Profile</Link>
+  </nav>
+  )
 };
 
 export default Navbar;
