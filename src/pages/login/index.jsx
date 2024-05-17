@@ -43,6 +43,10 @@ const Login = () => {
     }
   };
 
+  const handleRegister = () => {
+    navigate('/register'); // Navigate to the register page
+  };
+
   return (
     <div style={{
       display: 'flex',
@@ -71,7 +75,22 @@ const Login = () => {
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
-        <button type="submit">Log In</button>
+        <button type="submit">SUBMIT</button>
+        <button
+          type="button"
+          onClick={handleRegister}
+          style={{
+            marginTop: '10px',
+            backgroundColor: '#BA815E',
+            color: 'white',
+            border: 'none',
+            padding: '10px',
+            cursor: 'pointer',
+            width: '100%',
+          }}
+        >
+          Register
+        </button> {/* Register button */}
       </form>
     </div>
   );

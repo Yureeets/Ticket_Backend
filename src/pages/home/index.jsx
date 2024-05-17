@@ -11,15 +11,24 @@ const Home = () => {
   const navigate = useNavigate();
 
   const getFlights = async () => {
-    const result = await axios.get(`http://localhost:8000/api/v1/flights/cities/?origin_city=${where}&destination_city=${to}`);
-    return result.data;
+    try {
+      const result = await axios.get(`http://localhost:8000/api/v1/flights/cities/?origin_city=${where}&destination_city=${to}`);
+      return result.data;
+    } catch (error) {
+      console.error('Error fetching data:', error.response ? error.response.data : error.message);
+      throw error;
+    }
   };
 
   const { isLoading, error } = useQuery({
     queryKey: ['locations'],
     queryFn: getFlights,
     onSuccess: (data) => {
-      navigate('/results', { state: { list: data } });
+      if (data.length > 0) {
+        navigate('/data', { state: { list: data } });
+      } else {
+        navigate('/wrong_search');
+      }
     }
   });
 
@@ -31,16 +40,17 @@ const Home = () => {
   const mutation = useMutation({
     mutationFn: getFlights,
     onSuccess: (data) => {
-      navigate('/data', { state: { list: data } });
+      if (data.length > 0) {
+        navigate('/data', { state: { list: data } });
+      } else {
+        navigate('/wrong_search');
+      }
     },
   });
 
   return (
     <div className="home-container">
-      
-
-      <h1>Welcome to Airline Tickets</h1>
-
+      <h1 className='fancy'>LET'S START OUR TRIP!</h1>
       <form className="form" onSubmit={handleSubmit}>
         <label>From where we go?</label>
         <input type="text" name="origin_city" list="originCities" onChange={(e) => setWhere(e.target.value)} />
@@ -51,7 +61,6 @@ const Home = () => {
           <option value="Lviv" />
           <option value="New York" />
         </datalist>
-
         <label>Where we go?</label>
         <input type="text" name="destination_city" list="destinationCities" onChange={(e) => setTo(e.target.value)} />
         <datalist id="destinationCities">
@@ -61,8 +70,7 @@ const Home = () => {
           <option value="Lviv" />
           <option value="New York" />
         </datalist>
-
-        <button type="submit">SUBMIT</button>
+        <button className="home_button" type="submit">SUBMIT</button>
       </form>
     </div>
   );

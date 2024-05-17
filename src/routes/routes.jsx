@@ -5,6 +5,12 @@ import Login from "../pages/login";
 import Register from "../pages/register";
 import Data from "../pages/data";
 import Booking from "../pages/booking";
+import WrongSearch from "../pages/wrongsearch";
+import About from "../pages/about";
+import Terms from "../pages/Terms";
+import Help from "../pages/help";
+import AvailableTickets from "../pages/availav";
+
 
 // const ProtectedRoute = ({ children }) => {
 //   const location = useLocation();
@@ -48,6 +54,32 @@ const routes = [
     element: <Booking />,
     children: [],
   },
+  {
+    path: "/wrong_search",
+    element: <WrongSearch />,
+    children: [],
+  },
+  {
+    path: "/about",
+    element: <About />,
+    children: [],
+  },
+  {
+    path: "/terms",
+    element: <Terms />,
+    children: [],
+  },
+  {
+    path: "/help",
+    element: <Help />,
+    children: [],
+  },
+  {
+    path: "/buy",
+    element: <AvailableTickets />,
+    children: [],
+  },
+  
   
 ];
 
